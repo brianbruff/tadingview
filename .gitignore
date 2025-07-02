@@ -40,6 +40,9 @@ Thumbs.db
 /out-tsc
 /bazel-out
 
+# GitHub Pages
+.gh-pages/
+
 # Environment
 .env
 .env.local
