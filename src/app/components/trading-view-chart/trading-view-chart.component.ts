@@ -75,11 +75,11 @@ import { ThemeService } from '../../services/theme.service';
     }
 
     .color-indicator.eur {
-      background-color: #2196F3;
+      background-color: #00c896;
     }
 
     .color-indicator.gbp {
-      background-color: #FF5722;
+      background-color: #ff6b35;
     }
 
     .chart-container {
@@ -129,18 +129,18 @@ export class TradingViewChartComponent implements OnInit, AfterViewInit, OnDestr
   private getChartOptions() {
     return {
       layout: {
-        background: { color: this.isDarkTheme ? '#1e1e1e' : '#ffffff' },
-        textColor: this.isDarkTheme ? '#e0e0e0' : '#333333',
+        background: { color: this.isDarkTheme ? '#1e222d' : '#ffffff' },
+        textColor: this.isDarkTheme ? '#d1d4dc' : '#333333',
       },
       grid: {
-        vertLines: { color: this.isDarkTheme ? '#404040' : '#f0f0f0' },
-        horzLines: { color: this.isDarkTheme ? '#404040' : '#f0f0f0' },
+        vertLines: { color: this.isDarkTheme ? '#363a45' : '#f0f0f0' },
+        horzLines: { color: this.isDarkTheme ? '#363a45' : '#f0f0f0' },
       },
       rightPriceScale: {
-        borderColor: this.isDarkTheme ? '#404040' : '#e0e0e0',
+        borderColor: this.isDarkTheme ? '#363a45' : '#e0e0e0',
       },
       timeScale: {
-        borderColor: this.isDarkTheme ? '#404040' : '#e0e0e0',
+        borderColor: this.isDarkTheme ? '#363a45' : '#e0e0e0',
         timeVisible: true,
         secondsVisible: false,
         fixLeftEdge: true,
@@ -166,14 +166,14 @@ export class TradingViewChartComponent implements OnInit, AfterViewInit, OnDestr
 
     // EUR/USD Line Series
     const eurUsdSeries = this.chart.addLineSeries({
-      color: '#2196F3',
+      color: '#00c896',
       lineWidth: 2,
       title: 'EUR/USD',
     });
 
     // GBP/USD Line Series
     const gbpUsdSeries = this.chart.addLineSeries({
-      color: '#FF5722',
+      color: '#ff6b35',
       lineWidth: 2,
       title: 'GBP/USD',
     });

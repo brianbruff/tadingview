@@ -21,9 +21,9 @@ import { ThemeService, Theme } from './services/theme.service';
   ],
   template: `
     <div class="chat-container">
-      <mat-toolbar color="primary" class="chat-header">
+      <mat-toolbar class="chat-header">
         <div class="header-content">
-          <mat-icon>trending_up</mat-icon>
+          <mat-icon>show_chart</mat-icon>
           <span style="margin-left: 8px;">TradingView Demo - Currency Exchange Analysis</span>
         </div>
         <button 
@@ -77,7 +77,7 @@ import { ThemeService, Theme } from './services/theme.service';
     }
 
     .theme-toggle:focus {
-      outline: 2px solid rgba(255, 255, 255, 0.5);
+      outline: 2px solid var(--accent-primary);
       outline-offset: 2px;
     }
 
