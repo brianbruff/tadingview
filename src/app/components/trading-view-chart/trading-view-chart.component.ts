@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { createChart, IChartApi, LineData, Time } from 'lightweight-charts';
+import { Subscription } from 'rxjs';
 import { ExchangeRateData } from '../../data/exchange-rate.data';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-trading-view-chart',
@@ -28,24 +30,27 @@ import { ExchangeRateData } from '../../data/exchange-rate.data';
   styles: [`
     .chart-wrapper {
       width: 100%;
-      background: white;
+      background: var(--chart-bg);
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px var(--shadow-medium);
       overflow: hidden;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
     }
 
     .chart-header {
       padding: 16px;
-      background: #f8f9fa;
-      border-bottom: 1px solid #e9ecef;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: all 0.3s ease;
     }
 
     .chart-header h3 {
       margin: 0;
-      color: #333;
+      color: var(--text-primary);
       font-size: 18px;
       font-weight: 500;
     }
@@ -60,7 +65,7 @@ import { ExchangeRateData } from '../../data/exchange-rate.data';
       align-items: center;
       gap: 6px;
       font-size: 14px;
-      color: #666;
+      color: var(--text-secondary);
     }
 
     .color-indicator {
@@ -89,9 +94,18 @@ export class TradingViewChartComponent implements OnInit, AfterViewInit, OnDestr
   @Input() title: string = 'Exchange Rates';
   
   private chart!: IChartApi;
+  private themeSubscription: Subscription = new Subscription();
+  private isDarkTheme = false;
+
+  constructor(private themeService: ThemeService) {}
 
   ngOnInit() {
-    // Component initialization
+    this.themeSubscription = this.themeService.theme$.subscribe(theme => {
+      this.isDarkTheme = theme === 'dark';
+      if (this.chart) {
+        this.updateChartTheme();
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -102,36 +116,52 @@ export class TradingViewChartComponent implements OnInit, AfterViewInit, OnDestr
     if (this.chart) {
       this.chart.remove();
     }
+    this.themeSubscription.unsubscribe();
   }
 
-  private initChart() {
-    if (!this.chartContainer?.nativeElement) return;
+  private updateChartTheme() {
+    if (!this.chart) return;
 
-    this.chart = createChart(this.chartContainer.nativeElement, {
-      width: this.chartContainer.nativeElement.clientWidth,
-      height: 400,
+    const chartOptions = this.getChartOptions();
+    this.chart.applyOptions(chartOptions);
+  }
+
+  private getChartOptions() {
+    return {
       layout: {
-        background: { color: 'white' },
-        textColor: '#333',
+        background: { color: this.isDarkTheme ? '#1e1e1e' : '#ffffff' },
+        textColor: this.isDarkTheme ? '#e0e0e0' : '#333333',
       },
       grid: {
-        vertLines: { color: '#f0f0f0' },
-        horzLines: { color: '#f0f0f0' },
-      },
-      crosshair: {
-        mode: 1,
+        vertLines: { color: this.isDarkTheme ? '#404040' : '#f0f0f0' },
+        horzLines: { color: this.isDarkTheme ? '#404040' : '#f0f0f0' },
       },
       rightPriceScale: {
-        borderColor: '#e0e0e0',
+        borderColor: this.isDarkTheme ? '#404040' : '#e0e0e0',
       },
       timeScale: {
-        borderColor: '#e0e0e0',
+        borderColor: this.isDarkTheme ? '#404040' : '#e0e0e0',
         timeVisible: true,
         secondsVisible: false,
         fixLeftEdge: true,
         fixRightEdge: true,
         lockVisibleTimeRangeOnResize: true,
       },
+    };
+  }
+
+  private initChart() {
+    if (!this.chartContainer?.nativeElement) return;
+
+    const chartOptions = this.getChartOptions();
+
+    this.chart = createChart(this.chartContainer.nativeElement, {
+      width: this.chartContainer.nativeElement.clientWidth,
+      height: 400,
+      crosshair: {
+        mode: 1,
+      },
+      ...chartOptions,
     });
 
     // EUR/USD Line Series

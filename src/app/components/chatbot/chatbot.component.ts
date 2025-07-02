@@ -37,7 +37,7 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
         </div>
       </div>
       
-      <div class="chat-controls" *ngIf="!isComplete">
+      <div class="chat-controls" *ngIf="!isComplete && showManualControls">
         <mat-card class="control-panel">
           <div class="control-content">
             <p>{{ getControlMessage() }}</p>
@@ -53,8 +53,8 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
         <mat-card class="completion-panel">
           <div class="completion-content">
             <mat-icon class="check-icon">check_circle</mat-icon>
-            <h3>Analysis Complete</h3>
-            <p>Market analysis and exchange rate data have been successfully presented.</p>
+            <h3>Market Analysis Complete</h3>
+            <p>Comprehensive market analysis with exchange rate data and outlook has been automatically presented.</p>
             <button mat-stroked-button (click)="resetConversation()">
               <mat-icon>refresh</mat-icon>
               Start New Analysis
@@ -69,7 +69,8 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
       display: flex;
       flex-direction: column;
       height: calc(100vh - 64px);
-      background-color: #f5f5f5;
+      background-color: var(--bg-chat);
+      transition: background-color 0.3s ease;
     }
 
     .chat-messages {
@@ -92,16 +93,18 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
       align-items: center;
       gap: 12px;
       padding: 16px;
-      background-color: white;
+      background-color: var(--message-bot-bg);
+      border: 1px solid var(--border-color);
       border-radius: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px var(--shadow-light);
       max-width: 300px;
-      color: #666;
+      color: var(--text-secondary);
       font-style: italic;
+      transition: all 0.3s ease;
     }
 
     .typing-indicator mat-icon {
-      color: #1976d2;
+      color: var(--accent-primary);
       font-size: 20px;
       width: 20px;
       height: 20px;
@@ -117,7 +120,7 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background-color: #1976d2;
+      background-color: var(--accent-primary);
       animation: bounce 1.4s ease-in-out infinite both;
     }
 
@@ -138,14 +141,15 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
 
     .chat-controls {
       padding: 20px;
-      background-color: #f5f5f5;
+      background-color: var(--bg-chat);
+      transition: background-color 0.3s ease;
     }
 
     .control-panel {
       max-width: 1200px;
       margin: 0 auto;
-      background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
-      color: white;
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-hover) 100%);
+      color: var(--text-inverse);
     }
 
     .control-content {
@@ -162,8 +166,8 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
     }
 
     .control-content button {
-      background-color: white;
-      color: #1976d2;
+      background-color: var(--bg-primary);
+      color: var(--accent-primary);
       min-width: 160px;
     }
 
@@ -175,6 +179,8 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
       max-width: 600px;
       margin: 0 auto;
       text-align: center;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
     }
 
     .completion-content {
@@ -191,17 +197,17 @@ import { ChatMessage, CHAT_CONVERSATION } from '../../data/exchange-rate.data';
 
     .completion-content h3 {
       margin: 16px 0;
-      color: #333;
+      color: var(--text-primary);
     }
 
     .completion-content p {
-      color: #666;
+      color: var(--text-secondary);
       margin-bottom: 24px;
     }
 
     .completion-content button {
-      color: #1976d2;
-      border-color: #1976d2;
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
     }
 
     /* Responsive design */
@@ -225,12 +231,16 @@ export class ChatbotComponent implements OnInit, AfterViewChecked, OnDestroy {
   currentMessageIndex = 0;
   isTyping = false;
   isComplete = false;
+  showManualControls = false; // Set to false for automatic flow
   private shouldScrollToBottom = false;
 
   ngOnInit() {
     // Start with the first message (user question)
     this.displayedMessages = [this.allMessages[0]];
     this.currentMessageIndex = 0;
+    
+    // Automatically start the analysis flow
+    this.startAutomaticAnalysis();
   }
 
   ngAfterViewChecked() {
@@ -272,12 +282,58 @@ export class ChatbotComponent implements OnInit, AfterViewChecked, OnDestroy {
     }, 1500);
   }
 
+  startAutomaticAnalysis() {
+    // Wait a moment after the user question, then automatically proceed through all responses
+    setTimeout(() => {
+      this.autoPlayNextMessage();
+    }, 2000); // Wait 2 seconds after initial question
+  }
+
+  autoPlayNextMessage() {
+    if (this.isComplete || this.currentMessageIndex >= this.allMessages.length - 1) {
+      this.isComplete = true;
+      return;
+    }
+
+    this.isTyping = true;
+    this.shouldScrollToBottom = true;
+
+    // Simulate typing delay
+    setTimeout(() => {
+      this.currentMessageIndex++;
+      
+      if (this.currentMessageIndex < this.allMessages.length) {
+        this.displayedMessages.push(this.allMessages[this.currentMessageIndex]);
+        this.isTyping = false;
+        this.shouldScrollToBottom = true;
+        
+        // Check if this is the last message
+        if (this.currentMessageIndex >= this.allMessages.length - 1) {
+          setTimeout(() => {
+            this.isComplete = true;
+          }, 1000);
+        } else {
+          // Automatically continue to next message after a pause
+          setTimeout(() => {
+            this.autoPlayNextMessage();
+          }, 3000); // 3 second pause between messages
+        }
+      } else {
+        this.isTyping = false;
+        this.isComplete = true;
+      }
+    }, 2000); // 2 second typing simulation
+  }
+
   resetConversation() {
     this.displayedMessages = [this.allMessages[0]];
     this.currentMessageIndex = 0;
     this.isTyping = false;
     this.isComplete = false;
     this.shouldScrollToBottom = true;
+    
+    // Restart automatic analysis
+    this.startAutomaticAnalysis();
   }
 
   getControlMessage(): string {

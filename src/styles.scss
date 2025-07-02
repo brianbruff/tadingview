@@ -1,20 +1,94 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// CSS Custom Properties for theming
+:root {
+  // Light theme variables
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-chat: #f5f5f5;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-inverse: #ffffff;
+  --accent-primary: #1976d2;
+  --accent-hover: #1565c0;
+  --message-bot-bg: #ffffff;
+  --message-user-bg: #1976d2;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --border-color: #e0e0e0;
+  --chart-bg: #ffffff;
+}
+
+// Dark theme variables
+.dark-theme {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-chat: #1e1e1e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-inverse: #121212;
+  --accent-primary: #2196f3;
+  --accent-hover: #1976d2;
+  --message-bot-bg: #2d2d2d;
+  --message-user-bg: #2196f3;
+  --shadow-light: rgba(0, 0, 0, 0.3);
+  --shadow-medium: rgba(0, 0, 0, 0.4);
+  --border-color: #404040;
+  --chart-bg: #1e1e1e;
+}
+
+html, body { 
+  height: 100%; 
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
 
 .chat-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
+  background-color: var(--bg-chat);
+  transition: background-color 0.3s ease;
 }
 
 .chat-header {
-  background-color: #1976d2;
-  color: white;
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
   padding: 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--shadow-light);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--text-inverse);
+  color: var(--text-inverse);
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
 }
 
 .chat-messages {
@@ -24,6 +98,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   display: flex;
   flex-direction: column;
   gap: 16px;
+  background-color: var(--bg-chat);
 }
 
 .message {
@@ -31,20 +106,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding: 12px 16px;
   border-radius: 18px;
   word-wrap: break-word;
+  transition: all 0.3s ease;
 }
 
 .message.user {
   align-self: flex-end;
-  background-color: #1976d2;
-  color: white;
+  background-color: var(--message-user-bg);
+  color: var(--text-inverse);
   margin-left: auto;
 }
 
 .message.bot {
   align-self: flex-start;
-  background-color: white;
-  color: #333;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background-color: var(--message-bot-bg);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px var(--shadow-light);
+  border: 1px solid var(--border-color);
 }
 
 .chart-container {
@@ -53,14 +130,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   width: 100%;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px var(--shadow-medium);
+  background-color: var(--chart-bg);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
 .typing-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
@@ -73,7 +153,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #666;
+  background-color: var(--text-secondary);
   animation: bounce 1.4s ease-in-out infinite both;
 }
 

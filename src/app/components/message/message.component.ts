@@ -47,19 +47,22 @@ import { ChatMessage } from '../../data/exchange-rate.data';
 
     .message.user {
       align-self: flex-end;
-      background-color: #1976d2;
-      color: white;
+      background-color: var(--message-user-bg);
+      color: var(--text-inverse);
       border-radius: 18px 18px 4px 18px;
       padding: 12px 16px;
       margin-left: auto;
+      transition: background-color 0.3s ease;
     }
 
     .message.bot {
       align-self: flex-start;
-      background-color: white;
+      background-color: var(--message-bot-bg);
       border-radius: 4px 18px 18px 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px var(--shadow-light);
+      border: 1px solid var(--border-color);
       overflow: hidden;
+      transition: all 0.3s ease;
     }
 
     .message-header {
@@ -67,12 +70,13 @@ import { ChatMessage } from '../../data/exchange-rate.data';
       align-items: center;
       gap: 8px;
       padding: 12px 16px 8px 16px;
-      background-color: #f8f9fa;
-      border-bottom: 1px solid #e9ecef;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      transition: all 0.3s ease;
     }
 
     .bot-icon {
-      color: #1976d2;
+      color: var(--accent-primary);
       font-size: 20px;
       width: 20px;
       height: 20px;
@@ -80,14 +84,14 @@ import { ChatMessage } from '../../data/exchange-rate.data';
 
     .bot-name {
       font-weight: 500;
-      color: #333;
+      color: var(--text-primary);
       font-size: 14px;
     }
 
     .timestamp {
       margin-left: auto;
       font-size: 12px;
-      color: #666;
+      color: var(--text-secondary);
     }
 
     .message.user .timestamp {
@@ -99,7 +103,7 @@ import { ChatMessage } from '../../data/exchange-rate.data';
     }
 
     .message.bot .text-content {
-      color: #333;
+      color: var(--text-primary);
       line-height: 1.6;
     }
 
@@ -109,7 +113,7 @@ import { ChatMessage } from '../../data/exchange-rate.data';
 
     .text-content :global(strong) {
       font-weight: 600;
-      color: #1976d2;
+      color: var(--accent-primary);
     }
 
     .chart-section {
