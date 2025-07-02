@@ -83,8 +83,24 @@ src/
 
 - `pnpm start` - Start development server
 - `pnpm build` - Build for production
+- `pnpm build:gh-pages` - Build for GitHub Pages with correct base-href
 - `pnpm test` - Run unit tests
 - `pnpm watch` - Build in watch mode
+- `pnpm deploy` - Manual deployment to GitHub Pages
+
+## Deployment
+
+This application is automatically deployed to GitHub Pages when changes are pushed to the main branch.
+
+- **Live Demo**: https://brianbruff.github.io/tadingview/
+- **Auto-deployment**: Configured via GitHub Actions (`.github/workflows/deploy.yml`)
+- **Manual deployment**: Run `pnpm deploy` (requires repository push access)
+
+The deployment process:
+1. Builds the Angular application with production optimizations
+2. Sets the base-href to `/tadingview/` for GitHub Pages compatibility
+3. Uploads the build artifacts to GitHub Pages
+4. The site becomes available at the GitHub Pages URL
 
 ## Data Source
 
